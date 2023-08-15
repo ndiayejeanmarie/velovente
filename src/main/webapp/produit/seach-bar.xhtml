@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Liste des Produits</title>
+   <style type="text/css">
+      .card {
+         margin-top: 20px;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+
+   <h:form id="produitsForm">
+      <h1>Rechercher un Produit</h1>
+
+
+      <p:dataTable id="dataTable" value="#{produitBeans.produits}" var="produit" styleClass="card" scrollable="true"
+                   widgetVar="produitsTable" scrollWidth="100%" paginator="true" rows="10"
+                   paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                   rowsPerPageTemplate="5,10,15"
+                   filteredValue="#{produitBeans.produitsFiltres}">
+         <f:facet name="header">
+            <p:outputPanel>
+               <h:outputText value="Rechercher:"/>
+               <p:inputText id="globalFilter" onkeyup="PF('produitsTable').filter()" style="width:300px"
+                            placeholder="Entrer le mot clé"/>
+            </p:outputPanel>
+         </f:facet>
+
+         <p:column headerText="ID">
+            <h:outputText value="#{produit.id}" />
+         </p:column>
+         <p:column headerText="Nom" sortBy="#{produit.nom}" filterBy="#{produit.nom}" filterStyle="display: none;">
+            <h:outputText value="#{produit.nom}" />
+         </p:column>
+         <p:column headerText="Année du modèle" sortBy="#{produit.anneeModel}" filterBy="#{produit.anneeModel}" filterStyle="display: none;">
+            <h:outputText value="#{produit.anneeModel}" />
+         </p:column>
+         <p:column headerText="Prix de départ" sortBy="#{produit.prixDepart}" filterBy="#{produit.prixDepart}" filterStyle="display: none;">
+            <h:outputText value="#{produit.prixDepart}" />
+         </p:column>
+         <p:column headerText="Catégorie" sortBy="#{produit.categorieId.nom}" filterBy="#{produit.categorieId.nom}" filterStyle="display: none;">
+            <h:outputText value="#{produit.categorieId.nom}" />
+         </p:column>
+         <p:column headerText="Marque" sortBy="#{produit.marqueId.nom}" filterBy="#{produit.marqueId.nom}" filterStyle="display: none;">
+            <h:outputText value="#{produit.marqueId.nom}" />
+         </p:column>
+
+      </p:dataTable>
+
+   </h:form>
+
+
+</h:body>
+
+</html>

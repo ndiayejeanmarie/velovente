@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Ajout Employé</title>
+    <style type="text/css">
+        h1{
+            text-align: center;
+        }
+        .form-panel {
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-panel .ui-inputtext {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .form-panel .ui-button {
+            margin-top: 10px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form>
+        <p:messages/>
+        <p:outputPanel autoUpdate="true">
+            <p:panel styleClass="form-panel">
+                <f:facet name="header">
+                    <h3>Ajouter un nouvel employé</h3>
+                </f:facet>
+                <f:facet name="footer">
+                    <p:commandButton value="Ajouter"  action="#{employeBeans.create()}" update="@form" />
+                    <p:commandButton value="Annuler"   immediate="true" action="/employe/list-employes.xhtml" styleClass="ui-button-danger" style="margin-left: .5rem" />
+                </f:facet>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="nom" value="Nom:" />
+                    <p:inputText id="nom" required="true" requiredMessage="Le champ Nom est obligatoire."  value="#{employeBeans.employe.nom}" />
+
+                    <h:outputLabel for="prenom" value="Prénom:" />
+                    <p:inputText id="prenom" required="true" requiredMessage="Le champ Prénom est obligatoire." styleClass="ui-inputtext"  value="#{employeBeans.employe.prenom}" />
+
+                    <h:outputLabel for="email" value="Email:" />
+                    <p:inputText id="email" required="true" requiredMessage="Le champ Email est obligatoire." styleClass="ui-inputtext"  value="#{employeBeans.employe.email}" />
+
+                    <h:outputLabel for="telephone" value="Numéro de téléphone:" />
+                    <p:inputText id="telephone" styleClass="ui-inputtext"  value="#{employeBeans.employe.telephone}" />
+
+                    <h:outputLabel for="actif" value="Actif:" />
+                    <p:selectOneMenu id="actif" value="#{employeBeans.employe.actif}" required="true" requiredMessage="Le champ Actif est obligatoire.">
+                        <f:selectItem itemLabel="Oui" itemValue="1" />
+                        <f:selectItem itemLabel="Non" itemValue="0" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="magasinId" value="Magasin:" />
+                    <p:selectOneMenu id="magasinId" value="#{employeBeans.idmagasin}"  required="true" requiredMessage="Le champ Magasin est obligatoire.">
+                        <f:selectItem itemLabel="Sélectionner un magasin" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{magasinBeans.magasins}" var="magasin" itemLabel="#{magasin.nom}" itemValue="#{magasin.id}" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="managerId" value="Manager:" />
+                    <p:selectOneMenu id="managerId" value="#{employeBeans.idmanager}" >
+                        <f:selectItem itemLabel="Sélectionner un manager" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{employeBeans.employes}" var="manager" itemLabel="#{manager.nom} #{manager.prenom}" itemValue="#{manager.id}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </p:panel>
+        </p:outputPanel>
+    </h:form>
+</h:body>
+</html>

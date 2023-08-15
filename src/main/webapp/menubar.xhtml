@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <p:menubar>
+        <p:submenu label="Clients" icon="pi pi-fw pi-user">
+            <p:menuitem value="Ajouter" action="/client/ajout-client.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-user-plus"/>
+            <p:menuitem value="Liste des clients" action="/client/list-clients.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-user"/>
+        </p:submenu>
+        <p:submenu label="Commande" icon="pi pi-shopping-cart">
+            <p:menuitem value="Ajouter" action="/commande/ajout-commande.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus"/>
+            <p:menuitem value="Liste des Commandes" action="/commande/list-commandes.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+        <p:submenu label="Article commande" icon="pi pi-file-o" >
+            <p:menuitem value="Ajouter" action="/articlecommande/ajout-articlecommande.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus"/>
+            <p:menuitem value="Liste des articles" action="/articlecommande/list-articlecommandes.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+        <p:submenu label="Produit" icon="pi pi-align-justify" >
+            <p:menuitem value="Ajouter" action="/produit/ajout-produit.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus"/>
+            <p:menuitem value="Liste des Produits" action="/produit/list-produits.xhtml?faces-redirect=true" immediate="true" />
+            <p:menuitem value="Rechercher" action="/produit/recherche-produit.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+
+        <p:submenu label="Catégorie" icon="pi pi-fw pi-sitemap">
+            <p:menuitem value="Ajouter" action="/categorie/ajout-categorie.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-user-plus"/>
+            <p:menuitem value="Liste des catégories" action="/categorie/list-categories.xhtml?faces-redirect=true" immediate="true"/>
+        </p:submenu>
+
+        <p:submenu label="Marque" icon="pi pi-sitemap">
+            <p:menuitem value="Ajouter" action="/marque/ajout-marque.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus"/>
+            <p:menuitem value="Liste des marques" action="/marque/list-marques.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+
+
+        <p:submenu label="Magasin" icon="pi pi-home" >
+            <p:menuitem value="Ajouter" action="/magasin/ajout-magasin.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus"/>
+            <p:menuitem value="Liste des magasins" action="/magasin/list-magasins.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+
+        <p:submenu label="Stock"  icon="pi pi-sort-alt">
+            <p:menuitem value="Ajouter" action="/stock/ajout-stock.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus"/>
+            <p:menuitem value="Liste des stocks" action="/stock/list-stocks.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+
+
+        <p:submenu label="Employé" icon="pi pi pi-fw pi-user">
+            <p:menuitem value="Ajouter" action="/employe/ajout-employe.xhtml?faces-redirect=true" immediate="true" icon="pi pi-fw pi-plus" />
+            <p:menuitem value="Liste des employés" action="/employe/list-employes.xhtml?faces-redirect=true" immediate="true" />
+        </p:submenu>
+
+
+
+    </p:menubar>
+
+
+    <ui:insert name="menubar" />
+
+</h:body>
+
+</html>

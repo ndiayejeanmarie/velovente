@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Liste des Employés</title>
+    <style type="text/css">
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form id="employesForm">
+        <h1>Liste des Employés</h1>
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Nouveau" icon="pi pi-plus" action="/employe/ajout-employe.xhtml"
+                                 styleClass="ui-button-success" style="margin-right: .5rem"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="dataTable" value="#{employeBeans.employes}" var="employe" styleClass="card" scrollable="true"
+                     scrollWidth="100%" >
+            <p:column headerText="IDentifiant">
+                <h:outputText value="#{employe.id}" />
+            </p:column>
+            <p:column headerText="Prénom">
+                <h:outputText value="#{employe.prenom}" />
+            </p:column>
+            <p:column headerText="Nom">
+                <h:outputText value="#{employe.nom}" />
+            </p:column>
+            <p:column headerText="Email">
+                <h:outputText value="#{employe.email}" />
+            </p:column>
+            <p:column headerText="Téléphone">
+                <h:outputText value="#{employe.telephone}" />
+            </p:column>
+            <p:column headerText="Actif">
+                <h:outputText value="#{employe.actif == 1 ? 'Oui' : 'Non'}" />
+            </p:column>
+            <p:column headerText="Manager">
+                <h:outputText value="#{employe.managerId.prenom} #{employe.managerId.nom}" />
+            </p:column>
+
+
+            <p:column headerText="Magasin">
+                <h:outputText value="#{employe.magasinId.nom}" />
+            </p:column>
+
+            <p:column headerText="Actions">
+                <p:commandButton value="Supprimer" icon="pi pi-trash"  actionListener="#{employeBeans.setEmploye(employe)}"
+                                 process="@this" update=":editForm employesForm" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{employeBeans.setEmploye(employe)}"
+                                 update=":editForm" oncomplete="PF('editDialog').show()" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    <h:form id="editForm">
+        <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                         message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+            <p:commandButton value="Oui" icon="pi pi-check" actionListener="#{employeBeans.delete()}"
+                             oncomplete="PF('deleteDialog').hide(); window.location.href = '/employe/list-employes.xhtml';" />
+
+            <p:commandButton value="Non" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('deleteDialog').hide()" />
+
+        </p:confirmDialog>
+        <p:dialog header="Modifier l'employé" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+            <p:outputPanel id="edit-employe-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty employeBeans.employe}">
+                    <div class="field">
+                        <p:outputLabel for="prenom">Prénom</p:outputLabel>
+                        <p:inputText id="prenom" value="#{employeBeans.employe.prenom}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="nom">Nom</p:outputLabel>
+                        <p:inputText id="nom" value="#{employeBeans.employe.nom}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="email">Email</p:outputLabel>
+                        <p:inputText id="email" value="#{employeBeans.employe.email}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="telephone">Téléphone</p:outputLabel>
+                        <p:inputText id="telephone" value="#{employeBeans.employe.telephone}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="actif">Actif</p:outputLabel>
+                        <p:selectOneMenu id="actif" value="#{employeBeans.employe.actif}" required="true" requiredMessage="Le champ Actif est obligatoire.">
+                            <f:selectItem itemLabel="Oui" itemValue="1" />
+                            <f:selectItem itemLabel="Non" itemValue="0" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                        <h:outputLabel for="managerId" value="Manager:" />
+                        <p:selectOneMenu id="managerId" value="#{employeBeans.idmanager}" >
+                            <f:selectItem itemLabel="Sélectionner un manager" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{employeBeans.employes}" var="manager" itemLabel="#{manager.nom} #{manager.prenom}" itemValue="#{manager.id}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="magasinId">Magasin</p:outputLabel>
+                        <p:selectOneMenu id="magasinId" value="#{employeBeans.idmagasin}" required="true" requiredMessage="Le champ Magasin est obligatoire.">
+                            <f:selectItems value="#{magasinBeans.magasins}" var="magasin" itemLabel="#{magasin.nom}" itemValue="#{magasin.id}" />
+                        </p:selectOneMenu>
+                    </div>
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{employeBeans.update()}"
+                                 update="edit-employe-content employesForm" process="edit-employe-content @this" oncomplete="PF('editDialog').hide() " />
+                <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                                 class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+    </h:form>
+</h:body>
+</html>

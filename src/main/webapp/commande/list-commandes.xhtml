@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Liste des Commandes</title>
+    <style type="text/css">
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form id="commandesForm">
+        <h1>Liste des Commandes</h1>
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Nouveau" icon="pi pi-plus" action="/commande/ajout-commande.xhtml"
+                                 styleClass="ui-button-success" style="margin-right: .5rem"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="dataTable" value="#{commandeBeans.commandes}" var="commande" styleClass="card" scrollable="true"
+                     scrollWidth="100%" >
+            <p:column headerText="Numéro">
+                <h:outputText value="#{commande.numero}" />
+            </p:column>
+            <p:column headerText="Statut">
+                <h:outputText value="#{commande.statut}" />
+            </p:column>
+            <p:column headerText="Date de Commande">
+                <h:outputText value="#{commande.dateCommande}" />
+            </p:column>
+            <p:column headerText="Date de Livraison Prévue">
+                <h:outputText value="#{commande.dateLivraisonVoulue}" />
+            </p:column>
+            <p:column headerText="Date de Livraison">
+                <h:outputText value="#{commande.dateLivraison}" />
+            </p:column>
+            <p:column headerText="ID du Client">
+                <h:outputText value="#{commande.clientId.id}" />
+            </p:column>
+            <p:column headerText="ID du Magasin">
+                <h:outputText value="#{commande.magasinId.id}" />
+            </p:column>
+            <p:column headerText="ID du Vendeur">
+                <h:outputText value="#{commande.vendeurId.id}" />
+            </p:column>
+            <p:column headerText="Actions">
+                <p:commandButton value="Supprimer" icon="pi pi-trash" actionListener="#{commandeBeans.setCommande(commande)}"
+                                 process="@this" update=":deleteForm commandesForm" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{commandeBeans.setCommande(commande)}"
+                                 update=":editForm" oncomplete="PF('editDialog').show()" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    <h:form id="deleteForm">
+        <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                         message="Êtes-vous sûr de vouloir supprimer ?" header="Confirmation" severity="warn" >
+
+            <p:commandButton value="Oui" icon="pi pi-check" actionListener="#{commandeBeans.delete()}"
+                             oncomplete="PF('deleteDialog').hide();window.location.href = '/commande/list-commandes.xhtml';" />
+
+            <p:commandButton value="Non" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('deleteDialog').hide()" />
+
+        </p:confirmDialog>
+    </h:form>
+
+    <h:form id="editForm">
+        <p:dialog header="Modifier la commande" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+            <p:outputPanel id="edit-commande-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty commandeBeans.commande}">
+                    <div class="field">
+                        <p:outputLabel for="numero">Numéro de commande</p:outputLabel>
+                        <p:inputText id="numero" value="#{commandeBeans.commande.numero}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="statut">Statut</p:outputLabel>
+                        <p:inputText id="statut" value="#{commandeBeans.commande.statut}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="dateCommande">Date de commande</p:outputLabel>
+                        <p:calendar id="dateCommande" value="#{commandeBeans.commande.dateCommande}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="dateLivraisonVoulue">Date de livraison prévue</p:outputLabel>
+                        <p:calendar id="dateLivraisonVoulue" value="#{commandeBeans.commande.dateLivraisonVoulue}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="dateLivraison">Date de livraison</p:outputLabel>
+                        <p:calendar id="dateLivraison" value="#{commandeBeans.commande.dateLivraison}" />
+                    </div>
+                    <!-- Div pour le champ Client -->
+                    <div class="field">
+                        <h:outputLabel for="clientId" value="Client:" />
+                        <p:selectOneMenu id="clientId" value="#{commandeBeans.idclient}" required="true" requiredMessage="Le champ Client est obligatoire.">
+                            <f:selectItems value="#{clientBeans.clients}" var="client" itemLabel="#{client.id}" itemValue="#{client.id}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <!-- Div pour le champ Magasin -->
+                    <div class="field">
+                        <h:outputLabel for="magasinId" value="Magasin:" />
+                        <p:selectOneMenu id="magasinId" value="#{commandeBeans.idmagasin}" required="true" requiredMessage="Le champ Magasin est obligatoire.">
+                            <f:selectItems value="#{magasinBeans.magasins}" var="magasin" itemLabel="#{magasin.nom}" itemValue="#{magasin.id}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <!-- Div pour le champ Vendeur -->
+                    <div class="field">
+                        <h:outputLabel for="vendeurId" value="Vendeur:" />
+                        <p:selectOneMenu id="vendeurId" value="#{commandeBeans.idvendeur}" required="true" requiredMessage="Le champ Vendeur est obligatoire.">
+                            <f:selectItems value="#{employeBeans.employes}" var="vendeur" itemLabel="#{vendeur.prenom} #{vendeur.nom}" itemValue="#{vendeur.id}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{commandeBeans.update()}"
+                                 update="edit-commande-content commandesForm" process="edit-commande-content @this" oncomplete="PF('editDialog').hide();" />
+                <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                                 class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+    </h:form>
+
+</h:body>
+
+</html>

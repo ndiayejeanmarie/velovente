@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Ajout de stock</title>
+   <style type="">
+      h1 {
+         text-align: center;
+      }
+
+      .form-panel {
+         background-color: #f2f2f2;
+         border-radius: 5px;
+         padding: 10px;
+         margin-bottom: 20px;
+      }
+
+      .form-panel h3 {
+         margin-top: 0;
+         margin-bottom: 20px;
+      }
+
+      .form-panel .ui-inputtext {
+         width: 100%;
+         margin-bottom: 10px;
+      }
+
+      .form-panel .ui-button {
+         margin-top: 10px;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+   <h:form>
+      <p:messages />
+      <p:outputPanel autoUpdate="true">
+         <p:panel styleClass="form-panel">
+            <f:facet name="header">
+               <h3>Ajouter un nouvel élément de stock</h3>
+            </f:facet>
+            <f:facet name="footer">
+               <p:commandButton value="Ajouter" action="#{stockBeans.create()}" update="@form" />
+               <p:commandButton value="Annuler" immediate="true" action="/stock/list-stocks.xhtml"
+                                styleClass="ui-button-danger" style="margin-left: .5rem" />
+            </f:facet>
+            <h:panelGrid columns="2">
+               <h:outputLabel for="magasinId" value="ID du Magasin:" />
+               <p:inputText id="magasinId" required="true" requiredMessage="Le champ ID du Magasin est obligatoire."
+                            value="#{stockBeans.stock.stockPK.magasinId}" />
+
+               <h:outputLabel for="produitId" value="ID du Produit:" />
+               <p:inputText id="produitId" required="true" requiredMessage="Le champ ID du Produit est obligatoire."
+                            value="#{stockBeans.stock.stockPK.produitId}" />
+
+               <h:outputLabel for="quantite" value="Quantité:" />
+               <p:inputText id="quantite" required="true" requiredMessage="Le champ Quantité est obligatoire."
+                            value="#{stockBeans.stock.quantite}" />
+
+            </h:panelGrid>
+         </p:panel>
+      </p:outputPanel>
+   </h:form>
+</h:body>
+</html>

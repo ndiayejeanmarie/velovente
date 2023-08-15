@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Ajout Commande</title>
+    <style type="">
+        h1{
+            position: center;
+        }
+        .form-panel {
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-panel .ui-inputtext {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .form-panel .ui-button {
+            margin-top: 10px;
+
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form>
+        <p:messages/>
+        <p:outputPanel autoUpdate="true">
+            <p:panel styleClass="form-panel">
+                <f:facet name="header">
+                    <h3>Ajouter une nouvelle commande</h3>
+                </f:facet>
+                <f:facet name="footer">
+                    <p:commandButton value="Ajouter" action="#{commandeBeans.create()}" update="@form" />
+                    <p:commandButton value="Annuler" immediate="true" action="/commande/list-commandes.xhtml" styleClass="ui-button-danger" style="margin-left: .5rem" />
+                </f:facet>
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel for="statut" value="Statut:" />
+                    <p:inputText id="statut" required="true" requiredMessage="Le champ Statut est obligatoire." value="#{commandeBeans.commande.statut}" />
+
+                    <h:outputLabel for="dateCommande" value="Date de commande:" />
+                    <p:calendar id="dateCommande" required="true" requiredMessage="Le champ Date de commande est obligatoire." value="#{commandeBeans.commande.dateCommande}" />
+
+                    <h:outputLabel for="dateLivraisonVoulue" value="Date de livraison prévue:" />
+                    <p:calendar id="dateLivraisonVoulue" required="true" requiredMessage="Le champ Date de livraison prévue est obligatoire." value="#{commandeBeans.commande.dateLivraisonVoulue}" />
+
+                    <h:outputLabel for="dateLivraison" value="Date de livraison:" />
+                    <p:calendar id="dateLivraison" value="#{commandeBeans.commande.dateLivraison}" />
+
+                    <h:outputLabel for="clientId" value="Client:" />
+                    <p:selectOneMenu id="clientId" value="#{commandeBeans.idclient}" required="true" requiredMessage="Le champ Client est obligatoire." >
+                      <f:selectItems value="#{clientBeans.clients}" var="client" itemLabel="#{client.id}" itemValue="#{client.id}" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="magasinId" value="Magasin:" />
+                    <p:selectOneMenu id="magasinId" value="#{commandeBeans.idmagasin}" required="true" requiredMessage="Le champ Magasin est obligatoire.">
+                        <f:selectItems value="#{magasinBeans.magasins}" var="magasin" itemLabel="#{magasin.nom}" itemValue="#{magasin.id}" />
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="vendeurId" value="Vendeur:" />
+                    <p:selectOneMenu id="vendeurId" value="#{commandeBeans.idvendeur}" required="true" requiredMessage="Le champ Vendeur est obligatoire.">
+                        <f:selectItems value="#{employeBeans.employes}" var="vendeur" itemLabel="#{vendeur.prenom} #{vendeur.nom}" itemValue="#{vendeur.id}" />
+                    </p:selectOneMenu>
+
+
+
+                </h:panelGrid>
+            </p:panel>
+        </p:outputPanel>
+    </h:form>
+
+</h:body>
+
+</html>

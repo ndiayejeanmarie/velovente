@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Liste des Catégories</title>
+   <style type="text/css">
+      .card {
+         margin-top: 20px;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+
+   <div class="card marque">
+      <h:form id="categoriesForm">
+         <h1>Liste des Catégories</h1>
+         <p:toolbar>
+            <p:toolbarGroup>
+               <p:commandButton value="Nouveau" icon="pi pi-plus" action="/categorie/ajout-categorie.xhtml"
+                                styleClass="ui-button-success" style="margin-right: .5rem"/>
+            </p:toolbarGroup>
+         </p:toolbar>
+
+         <p:dataView value="#{categorieBeans.categories}" var="categorie" paginator="true" rows="12"
+                     rowsPerPageTemplate="6,12,16"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+            <!-- View in Grid format -->
+            <p:dataViewGridItem>
+               <div class="product-grid-item card border-1">
+                  <div class="product-grid-item-content">
+                     <div class="product-name">#{categorie.nom}</div>
+                     <div class="product-description">Ceci est la catégorie #{categorie.nom} de vélo</div>
+                  </div>
+                  <div class="product-grid-item-botom">
+                     <p:commandButton type="button" value="Modifier" icon="pi pi-pencil"
+                                      action="#{categorieBeans.setCategorie(categorie)}" oncomplete="PF('editDialog').show()" />
+                     <p:commandButton type="button" value="Supprimer" icon="pi pi-trash"
+                                      actionListener="#{categorieBeans.setCategorie(categorie)}" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                  </div>
+               </div>
+            </p:dataViewGridItem>
+
+            <!-- View in List format -->
+            <p:dataViewListItem>
+               <div class="product-list-item">
+                  <div class="product-list-detail">
+                     <!-- Your content for displaying categorie details in List view here -->
+
+                     <div class="product-name">#{categorie.nom}</div>
+                     <div class="product-description">Ceci est la catégorie #{categorie.nom} de vélo</div>
+                  </div>
+                  <div class="product-list-action">
+                     <p:commandButton type="button" value="Modifier" icon="pi pi-pencil" action="#{categorieBeans.setCategorie(categorie)}"
+                                      oncomplete="PF('editDialog').show()" />
+                     <p:commandButton type="button" value="Supprimer" icon="pi pi-trash" actionListener="#{categorieBeans.setCategorie(categorie)}"
+                                      oncomplete="PF('deleteDialog').show()" />
+                  </div>
+               </div>
+            </p:dataViewListItem>
+         </p:dataView>
+      </h:form>
+   </div>
+   <h:form id="editForm">
+      <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                       message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn">
+         <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{categorieBeans.delete()}"
+                          oncomplete="PF('deleteDialog').hide(); window.location.href = '/categorie/list-categories.xhtml';" />
+         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                          onclick="PF('deleteDialog').hide()" />
+      </p:confirmDialog>
+      <p:dialog header="Modifier la catégorie" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+         <p:outputPanel id="edit-categorie-content" class="ui-fluid">
+            <p:outputPanel rendered="#{not empty categorieBeans.categorie}">
+               <div class="field">
+                  <p:outputLabel for="nom">Nom</p:outputLabel>
+                  <p:inputText id="nom" value="#{categorieBeans.categorie.nom}" required="true" />
+               </div>
+            </p:outputPanel>
+         </p:outputPanel>
+         <f:facet name="footer">
+            <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{categorieBeans.update()}"
+                             update="edit-categorie-content categoriesForm" process="edit-categorie-content @this"
+                             oncomplete="PF('editDialog').hide() " />
+            <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                             class="ui-button-secondary" type="button" />
+         </f:facet>
+      </p:dialog>
+   </h:form>
+</h:body>
+
+</html>

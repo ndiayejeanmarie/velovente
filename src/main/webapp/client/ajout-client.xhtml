@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Ajout-client</title>
+    <style type="">
+        h1{
+            position: center;
+        }
+        .form-panel {
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-panel .ui-inputtext {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .form-panel .ui-button {
+            margin-top: 10px;
+
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+    <h:form>
+        <p:messages/>
+        <p:outputPanel autoUpdate="true">
+        <p:panel styleClass="form-panel">
+            <f:facet name="header">
+                <h3>Ajouter un nouveau client</h3>
+            </f:facet>
+            <f:facet name="footer">
+                <p:commandButton value="Ajouter"  action="#{clientBeans.create()}" update="@form" />
+                <p:commandButton value="Annuler"   immediate="true" action="/client/list-clients.xhtml" styleClass="ui-button-danger" style="margin-left: .5rem" />
+            </f:facet>
+            <h:panelGrid columns="2">
+                <h:outputLabel for="nom" value="Nom:" />
+                <p:inputText id="nom" required="true" requiredMessage="Le champ Nom est obligatoire."  value="#{clientBeans.client.nom}" />
+
+                <h:outputLabel for="prenom" value="Prénom:" />
+                <p:inputText id="prenom" required="true" requiredMessage="Le champ Prénom est obligatoire." styleClass="ui-inputtext"  value="#{clientBeans.client.prenom}" />
+
+                <h:outputLabel for="etat" value="Etat:" />
+                <p:inputText id="etat" required="true" requiredMessage="Le champ Etat est obligatoire." styleClass="ui-inputtext"  value="#{clientBeans.client.etat}" />
+
+                <h:outputLabel for="ville" value="Ville:" />
+                <p:inputText id="ville" required="true" requiredMessage="Le champ Ville est obligatoire." styleClass="ui-inputtext"  value="#{clientBeans.client.ville}" />
+
+                <h:outputLabel for="adresse" value="Adresse:" />
+                <p:inputText id="adresse" styleClass="ui-inputtext"  value="#{clientBeans.client.adresse}" />
+
+                <h:outputLabel for="email" value="Email:" />
+                <p:inputText id="email" required="true" requiredMessage="Le champ Email est obligatoire." styleClass="ui-inputtext"  value="#{clientBeans.client.email}" />
+
+                <h:outputLabel for="telephone" value="Numéro de téléphone:" />
+                <p:inputText id="telephone" styleClass="ui-inputtext"  value="#{clientBeans.client.telephone}" />
+
+                <h:outputLabel for="codeZip" value="Codezip" />
+                <p:inputText id="codeZip" styleClass="ui-inputtext"  value="#{clientBeans.client.codeZip}" />
+
+            </h:panelGrid>
+        </p:panel>
+        </p:outputPanel>
+    </h:form>
+
+</h:body>
+
+</html>

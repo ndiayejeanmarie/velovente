@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Liste des marques</title>
+
+</h:head>
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+
+   <div class="card marque">
+      <h:form id="marquesForm">
+      <h1>Liste des Marques</h1>
+      <p:toolbar>
+         <p:toolbarGroup>
+            <p:commandButton value="Nouveau" icon="pi pi-plus" action="/marque/ajout-marque.xhtml"
+                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+         </p:toolbarGroup>
+      </p:toolbar>
+
+
+         <p:dataView value="#{marqueBeans.marques}" var="marque"  paginator="true" rows="12" rowsPerPageTemplate="6,12,16"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+            <!-- View in Grid format -->
+            <p:dataViewGridItem>
+               <div class="product-grid-item card border-1">
+
+               <div class="product-grid-item-content">
+                 <div class="product-name">#{marque.nom}</div>
+                  <div class="product-description">Ceci est la marque #{marque.nom} de vélo</div>
+               </div>
+                  <div class="product-grid-item-botom">
+                     <p:commandButton type="button" value="Modifier" icon="pi pi-pencil" action="#{marqueBeans.setMarque(marque)}" oncomplete="PF('editDialog').show()" />
+                     <p:commandButton type="button"  value="Supprimer" icon="pi pi-trash" actionListener="#" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                  </div>
+               </div>
+            </p:dataViewGridItem>
+
+            <!-- View in List format -->
+            <p:dataViewListItem>
+               <div class="product-list-item">
+                  <div class="product-list-detail">
+                     <!-- Your content for displaying marque details in List view here -->
+
+                     <div class="product-name">#{marque.nom}</div>
+                     <div class="product-description">Ceci est la marque #{marque.nom} de vélo</div>
+                  </div>
+                  <div class="product-list-action">
+                     <p:commandButton type="button" value="Modifier" icon="pi pi-pencil" actionListener="#" oncomplete="PF('editDialog').show()" />
+                     <p:commandButton type="button" value="Supprimer" icon="pi pi-trash" actionListener="#" oncomplete="PF('deleteDialog').show()" />
+                  </div>
+               </div>
+            </p:dataViewListItem>
+         </p:dataView>
+
+
+      </h:form>
+   </div>
+   <h:form id="editForm">
+      <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                       message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+         <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{marqueBeans.delete()}"
+                          oncomplete="PF('deleteDialog').hide(); window.location.href = '/marque/list-marques.xhtml';" />
+
+         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                          onclick="PF('deleteDialog').hide()" />
+
+      </p:confirmDialog>
+      <p:dialog header="Modifier la marque" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+         <p:outputPanel id="edit-marque-content" class="ui-fluid">
+            <p:outputPanel rendered="#{not empty marqueBeans.marque}">
+               <div class="field">
+                  <p:outputLabel for="nom">Nom</p:outputLabel>
+                  <p:inputText id="nom" value="#{marqueBeans.marque.nom}" required="true" />
+               </div>
+            </p:outputPanel>
+         </p:outputPanel>
+
+         <f:facet name="footer">
+            <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{marqueBeans.update()}"
+                             update="edit-marque-content marquesForm" process="edit-marque-content @this" oncomplete="PF('editDialog').hide() " />
+            <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                             class="ui-button-secondary" type="button" />
+         </f:facet>
+      </p:dialog>
+   </h:form>
+</h:body>
+
+
+</html>

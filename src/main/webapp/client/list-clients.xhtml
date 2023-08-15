@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>liste-clients</title>
+    <style type="text/css">
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form id="clientsForm">
+        <h1>Liste des Clients</h1>
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Nouveau" icon="pi pi-plus" action="/client/ajout-client.xhtml"
+                                 styleClass="ui-button-success" style="margin-right: .5rem"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="dataTable" value="#{clientBeans.clients}" var="client" styleClass="card" scrollable="true"
+                     scrollWidth="100%" >
+            <p:column headerText="IDentifiants">
+                <h:outputText value="#{client.id}" />
+            </p:column>
+            <p:column headerText="Prénoms">
+                <h:outputText value="#{client.prenom}" />
+            </p:column>
+            <p:column headerText="Noms">
+                <h:outputText value="#{client.nom}" />
+            </p:column>
+            <p:column headerText="États">
+                <h:outputText value="#{client.etat}" />
+            </p:column>
+            <p:column headerText="Villes">
+                <h:outputText value="#{client.ville}" />
+            </p:column>
+            <p:column headerText="Adresses">
+                <h:outputText value="#{client.adresse}" />
+            </p:column>
+            <p:column headerText="Emails">
+                <h:outputText value="#{client.email}" />
+            </p:column>
+            <p:column headerText="Numéros">
+                <h:outputText value="#{client.telephone}" />
+            </p:column>
+            <p:column headerText="Codezip">
+                <h:outputText value="#{client.codeZip}" />
+            </p:column>
+            <p:column headerText="Actions">
+                <p:commandButton value="Supprimer" icon="pi pi-trash"  actionListener="#{clientBeans.setClient(client)}"
+                                 process="@this" update=":editForm clientsForm" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{clientBeans.setClient(client)}"
+                                 update=":editForm" oncomplete="PF('editDialog').show()" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    <h:form id="editForm">
+        <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                         message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+            <p:commandButton value="Yes" icon="pi pi-check" action="#{clientBeans.delete()}" update="clientsForm:dataTable" process=" @this"
+                             oncomplete="PF('deleteDialog').hide(); "/>
+
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('deleteDialog').hide()" />
+
+        </p:confirmDialog>
+        <p:dialog header="Modifier le client" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+            <p:outputPanel id="edit-client-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty clientBeans.client}">
+                    <div class="field">
+                        <p:outputLabel for="prenom">Prénom</p:outputLabel>
+                        <p:inputText id="prenom" value="#{clientBeans.client.prenom}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="nom">Nom</p:outputLabel>
+                        <p:inputText id="nom" value="#{clientBeans.client.nom}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="etat">État</p:outputLabel>
+                        <p:inputText id="etat" value="#{clientBeans.client.etat}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="ville">Ville</p:outputLabel>
+                        <p:inputText id="ville" value="#{clientBeans.client.ville}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="adresse">Adresse</p:outputLabel>
+                        <p:inputText id="adresse" value="#{clientBeans.client.adresse}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="email">Email</p:outputLabel>
+                        <p:inputText id="email" value="#{clientBeans.client.email}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="telephone">Téléphone</p:outputLabel>
+                        <p:inputText id="telephone" value="#{clientBeans.client.telephone}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="codeZip">Code Postal</p:outputLabel>
+                        <p:inputText id="codeZip" value="#{clientBeans.client.codeZip}" />
+                    </div>
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{clientBeans.update()}"
+                                 update="edit-client-content clientsForm" process="edit-client-content @this" oncomplete="PF('editDialog').hide() " />
+                <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                                 class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+    </h:form>
+
+
+</h:body>
+
+</html>

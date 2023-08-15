@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Liste des Produits</title>
+   <style type="text/css">
+      .card {
+         margin-top: 20px;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+
+   <h:form id="produitsForm">
+      <h1>Liste des Produits</h1>
+      <p:toolbar>
+         <p:toolbarGroup>
+            <p:commandButton value="Nouveau" icon="pi pi-plus" action="/produit/ajout-produit.xhtml"
+                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+         </p:toolbarGroup>
+      </p:toolbar>
+
+      <p:dataTable id="dataTable" value="#{produitBeans.produits}" var="produit" styleClass="card" scrollable="true"
+                   scrollWidth="100%" paginator="true" rows="10"
+                   paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                   rowsPerPageTemplate="5,10,15">
+         <p:column headerText="ID">
+            <h:outputText value="#{produit.id}" />
+         </p:column>
+         <p:column headerText="Nom" sortBy="#{produit.nom}" filterBy="#{produit.nom}">
+            <h:outputText value="#{produit.nom}" />
+         </p:column>
+         <p:column headerText="Année du modèle" sortBy="#{produit.anneeModel}" filterBy="#{produit.anneeModel}">
+            <h:outputText value="#{produit.anneeModel}" />
+         </p:column>
+         <p:column headerText="Prix de départ" sortBy="#{produit.prixDepart}" filterBy="#{produit.prixDepart}">
+            <h:outputText value="#{produit.prixDepart}" />
+         </p:column>
+         <p:column headerText="Catégorie" sortBy="#{produit.categorieId.nom}" filterBy="#{produit.categorieId.nom}">
+            <h:outputText value="#{produit.categorieId.nom}" />
+         </p:column>
+         <p:column headerText="Marque" sortBy="#{produit.marqueId.nom}" filterBy="#{produit.marqueId.nom}">
+            <h:outputText value="#{produit.marqueId.nom}" />
+         </p:column>
+         <p:column headerText="Actions">
+            <p:commandButton value="Supprimer" icon="pi pi-trash" actionListener="#{produitBeans.setProduit(produit)}"
+                             process="@this" update=":editForm produitsForm" oncomplete="PF('deleteDialog').show()"
+                             styleClass="ui-button-danger" />
+            <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{produitBeans.setProduit(produit)}"
+                             update=":editForm" oncomplete="PF('editDialog').show()" />
+         </p:column>
+      </p:dataTable>
+
+   </h:form>
+
+   <h:form id="editForm">
+      <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                       message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+         <p:commandButton value="Oui" icon="pi pi-check" actionListener="#{produitBeans.delete()}"
+                          oncomplete="PF('deleteDialog').hide(); window.location.href = '/produit/list-produits.xhtml';" />
+
+         <p:commandButton value="Non" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                          onclick="PF('deleteDialog').hide()" />
+
+      </p:confirmDialog>
+      <p:dialog header="Modifier le produit" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+         <p:outputPanel id="edit-produit-content" class="ui-fluid">
+            <p:outputPanel rendered="#{not empty produitBeans.produit}">
+               <div class="field">
+                  <p:outputLabel for="nom">Nom</p:outputLabel>
+                  <p:inputText id="nom" value="#{produitBeans.produit.nom}" required="true" />
+               </div>
+               <div class="field">
+                  <p:outputLabel for="anneeModel">Année du modèle</p:outputLabel>
+                  <p:inputText id="anneeModel" value="#{produitBeans.produit.anneeModel}" required="true" />
+               </div>
+               <div class="field">
+                  <p:outputLabel for="prixDepart">Prix de départ</p:outputLabel>
+                  <p:inputText id="prixDepart" value="#{produitBeans.produit.prixDepart}" required="true" />
+               </div>
+               <div class="field">
+                  <p:outputLabel for="categorieId">Catégorie</p:outputLabel>
+                  <p:selectOneMenu id="categorieId" value="#{produitBeans.idCategorie}" required="true">
+                     <f:selectItems value="#{categorieBeans.categories}" var="categorie" itemLabel="#{categorie.nom}"
+                                    itemValue="#{categorie.id}" />
+                  </p:selectOneMenu>
+
+               </div>
+               <div class="field">
+
+                  <p:outputLabel for="marqueId">Marque</p:outputLabel>
+                  <p:selectOneMenu id="marqueId" value="#{produitBeans.idMarque}" required="true">
+                     <f:selectItems value="#{marqueBeans.marques}" var="marque" itemLabel="#{marque.nom}"
+                                    itemValue="#{marque.id}" />
+                  </p:selectOneMenu>
+
+               </div>
+            </p:outputPanel>
+         </p:outputPanel>
+
+         <f:facet name="footer">
+            <p:commandButton value="Enregistrer" icon="pi pi-save" actionListener="#{produitBeans.update()}"
+                             styleClass="ui-button-success"  update="edit-produit-content produitsForm" process="edit-produit-content @this" oncomplete="PF('editDialog').hide() "  />
+            <p:commandButton value="Annuler" icon="pi pi-times" styleClass="ui-button-danger"
+                             onclick="PF('editDialog').hide()" />
+         </f:facet>
+      </p:dialog>
+   </h:form>
+</h:body>
+
+</html>

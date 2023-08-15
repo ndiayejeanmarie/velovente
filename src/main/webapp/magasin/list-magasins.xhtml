@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Liste des Magasins</title>
+    <style type="text/css">
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form id="magasinsForm">
+        <h1>Liste des Magasins</h1>
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Nouveau" icon="pi pi-plus" action="/magasin/ajout-magasin.xhtml"
+                                 styleClass="ui-button-success" style="margin-right: .5rem"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="dataTable" value="#{magasinBeans.magasins}" var="magasin" styleClass="card" scrollable="true"
+                     scrollWidth="100%" >
+            <p:column headerText="IDentifiants">
+                <h:outputText value="#{magasin.id}" />
+            </p:column>
+            <p:column headerText="Nom">
+                <h:outputText value="#{magasin.nom}" />
+            </p:column>
+            <p:column headerText="Téléphone">
+                <h:outputText value="#{magasin.telephone}" />
+            </p:column>
+            <p:column headerText="Email">
+                <h:outputText value="#{magasin.email}" />
+            </p:column>
+            <p:column headerText="Adresse">
+                <h:outputText value="#{magasin.adresse}" />
+            </p:column>
+            <p:column headerText="Ville">
+                <h:outputText value="#{magasin.ville}" />
+            </p:column>
+            <p:column headerText="État">
+                <h:outputText value="#{magasin.etat}" />
+            </p:column>
+            <p:column headerText="Code postal">
+                <h:outputText value="#{magasin.codeZip}" />
+            </p:column>
+            <p:column headerText="Actions">
+                <p:commandButton value="Supprimer" icon="pi pi-trash"  actionListener="#{magasinBeans.setMagasin(magasin)}"
+                                 process="@this" update=":editForm magasinsForm" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{magasinBeans.setMagasin(magasin)}"
+                                 update=":editForm" oncomplete="PF('editDialog').show()" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    <h:form id="editForm">
+        <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                         message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+            <p:commandButton value="Yes" icon="pi pi-check" action="#{magasinBeans.delete()}"
+                             oncomplete="PF('deleteDialog').hide(); " />
+
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('deleteDialog').hide()" />
+
+        </p:confirmDialog>
+        <p:dialog header="Modifier le magasin" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+            <p:outputPanel id="edit-magasin-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty magasinBeans.magasin}">
+                    <div class="field">
+                        <p:outputLabel for="nom">Nom</p:outputLabel>
+                        <p:inputText id="nom" value="#{magasinBeans.magasin.nom}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="telephone">Téléphone</p:outputLabel>
+                        <p:inputText id="telephone" value="#{magasinBeans.magasin.telephone}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="email">Email</p:outputLabel>
+                        <p:inputText id="email" value="#{magasinBeans.magasin.email}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="adresse">Adresse</p:outputLabel>
+                        <p:inputText id="adresse" value="#{magasinBeans.magasin.adresse}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="ville">Ville</p:outputLabel>
+                        <p:inputText id="ville" value="#{magasinBeans.magasin.ville}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="etat">État</p:outputLabel>
+                        <p:inputText id="etat" value="#{magasinBeans.magasin.etat}" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="codeZip">Code Postal</p:outputLabel>
+                        <p:inputText id="codeZip" value="#{magasinBeans.magasin.codeZip}" />
+                    </div>
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{magasinBeans.update()}"
+                                 update="edit-magasin-content magasinsForm" process="edit-magasin-content @this" oncomplete="PF('editDialog').hide() " />
+                <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                                 class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+    </h:form>
+
+
+</h:body>
+
+</html>

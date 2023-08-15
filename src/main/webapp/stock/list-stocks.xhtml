@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Liste des Stocks</title>
+   <style type="text/css">
+      .card {
+         margin-top: 20px;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+
+   <h:form id="stocksForm">
+      <h1>Liste des Stocks</h1>
+      <p:toolbar>
+         <p:toolbarGroup>
+            <p:commandButton value="Nouveau" icon="pi pi-plus" action="/stock/ajout-stock.xhtml"
+                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+         </p:toolbarGroup>
+      </p:toolbar>
+
+      <p:dataTable id="dataTable" value="#{stockBeans.stocks}" var="stock" styleClass="card" scrollable="true"
+                   scrollWidth="100%" >
+         <p:column headerText="Magasin">
+            <h:outputText value="#{stock.stockPK.magasinId}" />
+         </p:column>
+         <p:column headerText="Produit">
+            <h:outputText value="#{stock.produit.nom}" />
+         </p:column>
+         <p:column headerText="Quantité">
+            <h:outputText value="#{stock.quantite}" />
+         </p:column>
+         <p:column headerText="Actions">
+            <p:commandButton value="Supprimer" icon="pi pi-trash"  actionListener="#{stockBeans.setStock(stock)}"
+                             process="@this" update=":editForm stocksForm" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+            <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{stockBeans.setStock(stock)}"
+                             update=":editForm" oncomplete="PF('editDialog').show()" />
+         </p:column>
+      </p:dataTable>
+   </h:form>
+
+   <h:form id="editForm">
+      <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                       message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+         <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{stockBeans.delete()}"
+                          oncomplete="PF('deleteDialog').hide(); window.location.href = '/stock/list-stocks.xhtml';" />
+
+         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                          onclick="PF('deleteDialog').hide()" />
+
+      </p:confirmDialog>
+      <p:dialog header="Modifier le stock" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+         <p:outputPanel id="edit-stock-content" class="ui-fluid">
+            <p:outputPanel rendered="#{not empty stockBeans.stock}">
+               <div class="field">
+                  <p:outputLabel for="quantite">Quantité</p:outputLabel>
+                  <p:inputText id="quantite" value="#{stockBeans.stock.quantite}" required="true" />
+               </div>
+            </p:outputPanel>
+         </p:outputPanel>
+
+         <f:facet name="footer">
+            <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{stockBeans.update()}"
+                             update="edit-stock-content stocksForm" process="edit-stock-content @this" oncomplete="PF('editDialog').hide() " />
+            <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                             class="ui-button-secondary" type="button" />
+         </f:facet>
+      </p:dialog>
+   </h:form>
+</h:body>
+
+</html>

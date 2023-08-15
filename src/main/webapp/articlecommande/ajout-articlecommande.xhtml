@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Ajout ArticleCommande</title>
+    <style type="">
+        h1 {
+            text-align: center;
+        }
+
+        .form-panel {
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-panel .ui-inputtext {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .form-panel .ui-button {
+            margin-top: 10px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form>
+        <p:messages />
+
+        <p:outputPanel autoUpdate="true">
+            <p:panel styleClass="form-panel">
+                <f:facet name="header">
+                    <h3>Ajouter un nouvel article de commande</h3>
+                </f:facet>
+                <f:facet name="footer">
+                    <p:commandButton value="Ajouter" action="#{articleCommandeBeans.create()}" update="@form" />
+                    <p:commandButton value="Annuler" immediate="true" action="/articleCommande/list-articlecommandes.xhtml" styleClass="ui-button-danger" style="margin-left: .5rem" />
+                </f:facet>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="numeroCommande" value="Numéro de commande:" />
+                    <p:inputText id="numeroCommande" required="true" requiredMessage="Le champ Numéro de commande est obligatoire." value="#{articleCommandeBeans.articleCommande.articleCommandePK.numeroCommande}" />
+
+                    <h:outputLabel for="ligne" value="Ligne:" />
+                    <p:inputText id="ligne" required="true" requiredMessage="Le champ Ligne est obligatoire." value="#{articleCommandeBeans.articleCommande.articleCommandePK.ligne}" />
+
+                    <h:outputLabel for="produitId" value="ID du produit:" />
+                    <p:inputText id="produitId" required="true" requiredMessage="Le champ ID du produit est obligatoire." value="#{articleCommandeBeans.articleCommande.produitId}" />
+
+                    <h:outputLabel for="quantite" value="Quantité:" />
+                    <p:inputText id="quantite" required="true" requiredMessage="Le champ Quantité est obligatoire." value="#{articleCommandeBeans.articleCommande.quantite}" />
+
+                    <h:outputLabel for="prixDepart" value="Prix de départ:" />
+                    <p:inputText id="prixDepart" required="true" requiredMessage="Le champ Prix de départ est obligatoire." value="#{articleCommandeBeans.articleCommande.prixDepart}" />
+
+                    <h:outputLabel for="remise" value="Remise:" />
+                    <p:inputText id="remise" required="true" requiredMessage="Le champ Remise est obligatoire." value="#{articleCommandeBeans.articleCommande.remise}" />
+                </h:panelGrid>
+            </p:panel>
+        </p:outputPanel>
+    </h:form>
+
+</h:body>
+
+</html>

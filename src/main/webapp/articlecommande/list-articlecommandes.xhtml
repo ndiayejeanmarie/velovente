@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Ajout ArticleCommande</title>
+    <style type="text/css">
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <ui:include src="/menubar.xhtml" />
+
+    <h:form id="articleCommandeForm">
+        <h1>Liste des ArticleCommande</h1>
+        <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Nouveau" icon="pi pi-plus" action="/articlecommande/ajout-articlecommande.xhtml"
+                                 styleClass="ui-button-success" style="margin-right: .5rem"/>
+            </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:dataTable id="dataTable" value="#{articleCommandeBeans.articleCommandes}" var="articleCommande" styleClass="card" scrollable="true"
+                     scrollWidth="100%" >
+            <p:column headerText="Numéro de commande">
+                <h:outputText value="#{articleCommande.articleCommandePK.numeroCommande}" />
+            </p:column>
+            <p:column headerText="Ligne">
+                <h:outputText value="#{articleCommande.articleCommandePK.ligne}" />
+            </p:column>
+            <p:column headerText="ID du produit">
+                <h:outputText value="#{articleCommande.produitId}" />
+            </p:column>
+            <p:column headerText="Quantité">
+                <h:outputText value="#{articleCommande.quantite}" />
+            </p:column>
+            <p:column headerText="Prix de départ">
+                <h:outputText value="#{articleCommande.prixDepart}" />
+            </p:column>
+            <p:column headerText="Remise">
+                <h:outputText value="#{articleCommande.remise}" />
+            </p:column>
+            <p:column headerText="Actions">
+                <p:commandButton value="Supprimer" icon="pi pi-trash" actionListener="#{articleCommandeBeans.setArticleCommande(articleCommande)}"
+                                 process="@this" update=":editForm dataTable" oncomplete="PF('deleteDialog').show()" styleClass="ui-button-danger" />
+                <p:commandButton value="Modifier" icon="pi pi-pencil" actionListener="#{articleCommandeBeans.setArticleCommande(articleCommande)}"
+                                 update=":editForm" oncomplete="PF('editDialog').show()" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+    <h:form id="editForm">
+        <p:confirmDialog widgetVar="deleteDialog" showEffect="fade" width="300"
+                         message="Êtes-vous sûr de vouloir supprimer ?" header="Confirm" severity="warn" >
+
+            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{articleCommandeBeans.delete()}"
+                             oncomplete="PF('deleteDialog').hide(); window.location.href = '/articlecommande/list-articlecommandes.xhtml';" />
+
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('deleteDialog').hide()" />
+
+        </p:confirmDialog>
+        <p:dialog header="Modifier l'article de commande" showEffect="fade" modal="true" widgetVar="editDialog" responsive="true">
+            <p:outputPanel id="edit-articleCommande-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty articleCommandeBeans.articleCommande}">
+                    <div class="field">
+                        <p:outputLabel for="numeroCommande">Numéro de commande</p:outputLabel>
+                        <p:inputText id="numeroCommande" value="#{articleCommandeBeans.articleCommande.articleCommandePK.numeroCommande}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="ligne">Ligne</p:outputLabel>
+                        <p:inputText id="ligne" value="#{articleCommandeBeans.articleCommande.articleCommandePK.ligne}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="produitId">ID du produit</p:outputLabel>
+                        <p:inputText id="produitId" value="#{articleCommandeBeans.articleCommande.produitId}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="quantite">Quantité</p:outputLabel>
+                        <p:inputText id="quantite" value="#{articleCommandeBeans.articleCommande.quantite}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="prixDepart">Prix de départ</p:outputLabel>
+                        <p:inputText id="prixDepart" value="#{articleCommandeBeans.articleCommande.prixDepart}" required="true" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="remise">Remise</p:outputLabel>
+                        <p:inputText id="remise" value="#{articleCommandeBeans.articleCommande.remise}" required="true" />
+                    </div>
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Enregistrer" icon="pi pi-check" actionListener="#{articleCommandeBeans.update()}"
+                                 update="edit-articleCommande-content articleCommandeForm:dataTable" process="edit-articleCommande-content @this" oncomplete="PF('editDialog').hide() " />
+                <p:commandButton value="Annuler" icon="pi pi-times" onclick="PF('editDialog').hide()"
+                                 class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+    </h:form>
+
+
+</h:body>
+
+</html>

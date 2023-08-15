@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/Clients_liste.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/list-clients.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/client/listmodif-clients.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/client" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/produit/search-bar.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/produit" />
+      </map>
+    </option>
+  </component>
+</project>

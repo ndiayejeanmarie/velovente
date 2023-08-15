@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+   <title>Liste des Produits</title>
+   <style type="text/css">
+      .card {
+         margin-top: 20px;
+      }
+   </style>
+</h:head>
+
+<h:body>
+   <ui:include src="/menubar.xhtml" />
+
+   <h:form id="produitsForm">
+      <h1>Recherche de Produit</h1>
+      <h:form>
+         <p:outputPanel autoUpdate="true">
+            <p:panel styleClass="form-panel">
+         <f:facet name="footer">
+            <p:commandButton value="Rechercher " action="#{produitBeans.search()}"/>
+         </f:facet>
+         <h:panelGrid columns="1">
+            <p:inputText value="#{produitBeans.nomProduit}" style="width:300px" placeholder="Rechercher par NomProduit"/>
+            <p:inputText value="#{produitBeans.nomMarque}" style="width:300px" placeholder="Rechercher par NomMarque"/>
+            <p:inputText value="#{produitBeans.nomCategorie}" style="width:300px" placeholder="Rechercher par NomCategorie"/>
+            <p:inputText value="#{produitBeans.prixMin}" style="width:300px" placeholder="prixMin"/>
+            <p:inputText value="#{produitBeans.prixMax}" style="width:300px" placeholder="prixMax"/>
+         </h:panelGrid>
+            </p:panel>
+         </p:outputPanel>
+      </h:form>
+
+
+      <!-- Vue DataView - Affichage Grille -->
+
+      <p:dataView value="#{produitBeans.produitsRecherches}" var="produit" styleClass="card" scrollable="true"
+                  widgetVar="produitsTable" scrollWidth="100%" paginator="true" rows="10"
+                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                  rowsPerPageTemplate="5,10,15">
+
+
+         <p:dataViewListItem>
+            <div class="card flex justify-content-center">
+               <h:panelGrid columns="2" cellpadding="7">
+                  <p:column headerText="ID">
+                     <h:outputText value="#{produit.id}" />
+                  </p:column>
+
+                  <p:column headerText="Nom" sortBy="#{produit.nom}" filterBy="#{produit.nom}">
+                     <h:outputText value="#{produit.nom}" />
+                  </p:column>
+
+                  <p:column headerText="Année du modèle" filterBy="#{produit.anneeModel}" sortBy="#{produit.anneeModel}">
+                     <h:outputText value="#{produit.anneeModel}" />
+                  </p:column>
+
+                  <p:column headerText="Prix de départ" filterBy="#{produit.prixDepart}" sortBy="#{produit.prixDepart}">
+                     <h:outputText value="#{produit.prixDepart}" />
+                  </p:column>
+
+                  <p:column headerText="Catégorie" filterBy="#{produit.categorieId.nom}" sortBy="#{produit.categorieId.nom}">
+                     <h:outputText value="#{produit.categorieId.nom}" />
+                  </p:column>
+
+                  <p:column headerText="Marque" filterBy="#{produit.marqueId.nom}" sortBy="#{produit.marqueId.nom}">
+                     <h:outputText value="#{produit.marqueId.nom}" />
+                  </p:column>
+               </h:panelGrid>
+            </div>
+         </p:dataViewListItem>
+      </p:dataView>
+
+
+   </h:form>
+
+</h:body>
+
+</html>
